@@ -1,9 +1,9 @@
-from preswald import text, plotly, connect, get_df, table, slider
+from preswald import text, plotly, connect, get_df, table, slider, query, text_input
 import pandas as pd
 import plotly.express as px
 
 text("# Welcome!")
-text("Basic table")
+text("### Basic table")
 
 
 # Load the CSV
@@ -15,7 +15,7 @@ df = get_df(dataset_name)
 df = df[['Country', 'Year', 'Continent', 'Region', 'Avg_Daily_Sugar_Intake']]
 
 
-text("Scatter Plot")
+text("### Scatter Plot")
 
 table(df, title="Global Sugar Data")
 
@@ -29,8 +29,10 @@ fig = px.scatter(df,
                 })
 # Show the plot
 plotly(fig)
+text("There don't seem to be any outliers present in this data, however if they were present they could be imputed through various methods using numpy")
 
-text("Slider with Sugar Intake Values")
+
+text("### Slider with Sugar Intake Values")
 
 
 #Slider 
@@ -39,3 +41,24 @@ threshold = slider("Threshold", min_val=0, max_val=200, default=50)
 table(df[df[threshold_value_column] > threshold], title="Daily Sugar Intake")
 
 
+# SQL Time
+
+# Basic table retrieval
+ 
+sql = "SELECT Country, Year, Avg_Daily_Sugar_Intake  FROM sugar_consumption_dataset_csv"
+filtered_df = query(sql, "sugar_consumption_dataset_csv")
+text("# Just Country, Year and Sugar Intake filtered using SQL")
+table(filtered_df, title="Filtered Data")
+
+
+
+
+# Enter the Country and get it's details
+
+# Basic text input
+name = text_input(label="Enter a country", placeholder="India")
+name="India"
+sql = f"SELECT Country, Year, Avg_Daily_Sugar_Intake  FROM sugar_consumption_dataset_csv WHERE Country='{name}'"
+filtered_df = query(sql, "sugar_consumption_dataset_csv")
+text("# Specific Country")
+table(filtered_df, title="Filtered Data")
